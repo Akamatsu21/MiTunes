@@ -1,4 +1,5 @@
-<!--Author: Jakub Holewik
+<!--Assignment: MiTunes
+	Author: Jakub Holewik
 	ID: B615637
 	Login: cojrh2-->
 
@@ -11,8 +12,16 @@
 			{
 				border: 2px solid black;
 				display: inline-block;
+				overflow: scroll;
 				height: 450px;
 				width: 400px;
+				color: black;
+			}
+
+			.choice:hover
+			{
+				background-color: grey;
+				cursor: pointer;
 			}
 
 			#keyboard
@@ -56,41 +65,86 @@
 				search_bar.value = "";
 			}
 
+			//This function generates a song tab, whenever a new song is selected
+			function generateSongData(album_id, song_id)
+			{
+				var alb = albums[album_id];
+				var track = alb.tracks[song_id];
+				var path = "audio/" + alb.artist + "/" + alb.title + "/" + track.mp3.substring(0, track.mp3.length - 4);
+				var code =  "<img src='artwork/" + alb.artwork + ".jpg' />" +
+							"<p>" + alb.artist + "<br />" + alb.title + "</p>" +
+							"<p>Track " + (song_id + 1) + "/" + alb.tracks.length + "<br />" + track.title + "</p>" +
+							"<audio controls='controls'>" +
+							"<source src='" + path +".mp3' type='audio/mpeg'>" +
+							"<source src='" + path +".wav' type='audio/wav'>" +
+							"Your browser does not support the audio element.</audio>";
+
+				current_track.innerHTML = code;
+			}
+
+			//This function generates code for the track list, whenever a new album is chosen
+			function generateTrackList(album_id)
+			{
+				var alb = albums[album_id];
+				var code = alb.title + "<br />by " + alb.artist;
+				
+				for(i in alb.tracks)
+				{
+					code += "<p class='choice' onclick='generateSongData(" + album_id + ", " + i + ");'>" + alb.tracks[i].title + "</p>";
+				}
+
+				track_list.innerHTML = code;
+			}
+
+			//This function generates code for the album list
+			function generateAlbumList()
+			{
+				var code = "Albums:";
+				for(i in albums)
+				{
+					code += "<p class='choice' onclick='generateTrackList(" + i + ");'>" + albums[i].artist + "/" + albums[i].title + "</p>";
+				}
+
+				album_list.innerHTML = code;
+			}
+
 			//This function generates code for the keyboard used in the 'keyboard' div
 			function generateKeyboard()
 			{
 				var qwerty = [ "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" ];
-				var keyboard_code = "<form><input type='text' id='search_bar' readonly></form>";
+				var code = "<form><input type='text' id='search_bar' readonly></form>";
 
 				for(i in qwerty)
 				{
-					keyboard_code += "<div>";
+					code += "<div>";
 					for(var k = 0; k < qwerty[i].length; k++)
 					{
-						keyboard_code += "<div class='key' onclick='insertLetter(this.innerHTML);'>" + qwerty[i][k] + "</div>";
+						code += "<div class='key' onclick='insertLetter(this.innerHTML);'>" + qwerty[i][k] + "</div>";
 					}
-					keyboard_code += "</div>";
+					code += "</div>";
 				}
-				keyboard_code += "<div><div class='key' onclick='insertLetter(\" \");'>SPACE</div>";
-				keyboard_code += "<div class='key' onclick='deleteLetter();'>BACK</div>";
-				keyboard_code += "<div class='key' onclick='resetSearchBar();'>RESET</div></div>";
+				code += "<div><div class='key' onclick='insertLetter(\" \");'>SPACE</div>";
+				code += "<div class='key' onclick='deleteLetter();'>BACK</div>";
+				code += "<div class='key' onclick='resetSearchBar();'>RESET</div></div>";
 
-				return keyboard_code;
+				keyboard.innerHTML = code;
 			}
 		</script>
 	</head>
 	<body>
-		<div id='albums' class='display'>
-			placeholder1
+		<div id='album_list' class='display'>
 		</div>
-		<div id='tracks' class='display'>
-			placeholder2
+		<div id='track_list' class='display'>
+		No album selected
 		</div>
-		<div id='song' class='display'>
-			placeholder3
+		<div id='current_track' class='display'>
+		No song selected
 		</div>
 		<div id='keyboard'>
 		</div>
-		<script>keyboard.innerHTML = generateKeyboard();</script>
+		<script>
+			generateAlbumList();
+			generateKeyboard();
+		</script>
 	</body>
 </html>
