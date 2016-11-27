@@ -8,14 +8,27 @@
 	<head>
 		<title>MiTunes</title>
 		<style type="text/css">
+			*
+			{
+				box-sizing: content-box;
+			}
+
+			#tabs
+			{
+				border: 2px solid blue;
+				text-align: center;
+			}
+
 			.display
 			{
 				border: 2px solid black;
+				border-collapse: collapse;
 				display: inline-block;
 				overflow: scroll;
-				height: 450px;
-				width: 400px;
+				height: 400px;
+				width: 350px;
 				color: black;
+				text-align: left;
 			}
 
 			.choice:hover
@@ -32,16 +45,38 @@
 			#keyboard
 			{
 				border: 5px solid red;
-				height: 350px;
-				width: 1200px;
+				margin: auto;
+				line-height: 30px;
+				height: 265px;
+				width: 560px;
+				text-align: center;
+			}
+
+			#search_bar
+			{
+				height: 35px;
+				width: 180px;
+				margin-top: 10px;
+				font-family: Helvetica;
+				font-size: 25px;
+				cursor: pointer;
 			}
 
 			.key
 			{
 				border: 3px solid blue;
-				display: inline;
-				font-size: 30px;
-				padding: 0;
+				display: inline-block;
+				font-size: 40px;
+				margin: 4px;
+				height: 32px;
+				width: 35px;
+				padding: 3px;
+				font-family: Calibri;
+			}
+
+			.big
+			{
+				width: 150px;
 			}
 
 			.key:hover
@@ -204,22 +239,24 @@
 					}
 					code += "</div>";
 				}
-				code += "<div><div class='key' onclick='insertLetter(\" \");'>SPACE</div>";
-				code += "<div class='key' onclick='deleteLetter();'>BACK</div>";
-				code += "<div class='key' onclick='resetSearchBar();'>RESET</div></div>";
+				code += "<div><div class='key big' onclick='insertLetter(\" \");'>SPACE</div>";
+				code += "<div class='key big' onclick='deleteLetter();'>BACK</div>";
+				code += "<div class='key big' onclick='resetSearchBar();'>RESET</div></div>";
 
 				keyboard.innerHTML = code;
 			}
 		</script>
 	</head>
 	<body>
-		<div id='album_list' class='display'>
-		</div>
-		<div id='track_list' class='display'>
-		No album selected
-		</div>
-		<div id='current_track' class='display'>
-		No song selected
+		<div id='tabs'>
+			<div id='album_list' class='display'>
+			</div>
+			<div id='track_list' class='display'>
+				No album selected
+			</div>
+			<div id='current_track' class='display'>
+				No song selected
+			</div>
 		</div>
 		<div id='keyboard'>
 		</div>
