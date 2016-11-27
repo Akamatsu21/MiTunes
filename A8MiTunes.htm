@@ -24,7 +24,7 @@
 
 			.key
 			{
-				border: 7px solid blue;
+				border: 3px solid blue;
 				display: inline;
 				font-size: 30px;
 				padding: 0;
@@ -33,15 +33,51 @@
 			.key:hover
 			{
 				background-color: grey;
-			}
-
-			a
-			{
-				color: black;
-				text-decoration: none;
+				cursor: pointer;
 			}
 		</style>
-		
+		<script type="text/javascript" src="music.js" /></script>
+		<script type="text/javascript">
+			//This function deletes last letter of the search bar
+			function deleteLetter()
+			{
+				search_bar.value = search_bar.value.substring(0, search_bar.value.length - 1);
+			}
+
+			//This function inserts value of the clicked button into the search bar
+			function insertLetter(c)
+			{
+				search_bar.value += c.toLowerCase();
+			}
+
+			//This function deletes all letters from the search bar
+			function resetSearchBar()
+			{
+				search_bar.value = "";
+			}
+
+			//This function generates code for the keyboard used in the 'keyboard' div
+			function generateKeyboard()
+			{
+				var qwerty = [ "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" ];
+				var keyboard_code = "<form><input type='text' id='search_bar' readonly></form>";
+
+				for(i in qwerty)
+				{
+					keyboard_code += "<div>";
+					for(var k = 0; k < qwerty[i].length; k++)
+					{
+						keyboard_code += "<div class='key' onclick='insertLetter(this.innerHTML);'>" + qwerty[i][k] + "</div>";
+					}
+					keyboard_code += "</div>";
+				}
+				keyboard_code += "<div><div class='key' onclick='insertLetter(\" \");'>SPACE</div>";
+				keyboard_code += "<div class='key' onclick='deleteLetter();'>BACK</div>";
+				keyboard_code += "<div class='key' onclick='resetSearchBar();'>RESET</div></div>";
+
+				return keyboard_code;
+			}
+		</script>
 	</head>
 	<body>
 		<div id='albums' class='display'>
@@ -54,9 +90,7 @@
 			placeholder3
 		</div>
 		<div id='keyboard'>
-			<div class='key' onclick='alert("Q");'>
-				<a href="#">Q</a>
-			</div>
 		</div>
+		<script>keyboard.innerHTML = generateKeyboard();</script>
 	</body>
 </html>
