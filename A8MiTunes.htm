@@ -24,6 +24,11 @@
 				cursor: pointer;
 			}
 
+			.found
+			{
+				background-color: green;
+			}
+
 			#keyboard
 			{
 				border: 5px solid red;
@@ -47,24 +52,6 @@
 		</style>
 		<script type="text/javascript" src="music.js" /></script>
 		<script type="text/javascript">
-			//This function deletes last letter of the search bar
-			function deleteLetter()
-			{
-				search_bar.value = search_bar.value.substring(0, search_bar.value.length - 1);
-			}
-
-			//This function inserts value of the clicked button into the search bar
-			function insertLetter(c)
-			{
-				search_bar.value += c.toLowerCase();
-			}
-
-			//This function deletes all letters from the search bar
-			function resetSearchBar()
-			{
-				search_bar.value = "";
-			}
-
 			//This function generates a song tab, whenever a new song is selected
 			function generateSongData(album_id, song_id)
 			{
@@ -108,11 +95,105 @@
 				album_list.innerHTML = code;
 			}
 
+			//This function will output the found contents in track list, whenever contents of search bar change
+			function search()
+			{
+				var s = search_bar.value;
+				code = "";
+
+				if(s == "")
+				{
+					code = "No album selected";
+				}
+				else
+				{
+					for(i in albums)
+					{
+						var alb = albums[i];
+						for(k in alb.tracks)
+						{
+							var track = alb.tracks[k];
+							var low_title = track.title.toLowerCase();
+							var low_lyrics = track.lyrics.toLowerCase();
+							var in_title = false;
+							var in_lyrics = false;
+							var ti = low_title.indexOf(s);
+							if(ti != -1) in_title = true;
+							var li = low_lyrics.indexOf(s);
+							if(li != -1) in_lyrics = true;
+
+							if(in_title || in_lyrics)
+							{
+								code += "<p class='choice' onclick='generateSongData(" + i + ", " + k + ");'>";
+
+								if(in_title)
+								{
+									code += track.title.substring(0, ti) +
+											"<span class='found'>" + track.title.substring(ti, ti + s.length) + "</span>" +
+											track.title.substring(ti + s.length, track.title.length);
+								}
+								else
+								{
+									code += track.title;
+								}
+
+								code += "<br />" + alb.artist + ", " + alb.title;
+
+								if(in_lyrics)
+								{
+									code += "<br />";
+									var start = track.lyrics.lastIndexOf(" ", li - 5);
+									if(start == -1) start = 0;
+									else start++;
+									var end = track.lyrics.indexOf(" ", li + s.length + 5);
+									if(end == -1) end = track.lyrics.length;
+									if(start != 0) code += "...";
+									code += track.lyrics.substring(start, li) +
+											"<span class='found'>" + track.lyrics.substring(li, li + s.length) + "</span>" +
+											track.lyrics.substring(li + s.length, end);
+									if(end != track.lyrics.length) code += "...";
+								}
+
+								code += "</p>";
+							}
+						}
+					}
+
+					if(code == "")
+					{
+						code = "No matches found.";
+					}
+				}
+
+				track_list.innerHTML = code;
+			}
+
+			//This function deletes last letter of the search bar
+			function deleteLetter()
+			{
+				search_bar.value = search_bar.value.substring(0, search_bar.value.length - 1);
+				search();
+			}
+
+			//This function inserts value of the clicked button into the search bar
+			function insertLetter(c)
+			{
+				search_bar.value += c.toLowerCase();
+				search();
+			}
+
+			//This function deletes all letters from the search bar
+			function resetSearchBar()
+			{
+				search_bar.value = "";
+				search();
+			}
+
 			//This function generates code for the keyboard used in the 'keyboard' div
 			function generateKeyboard()
 			{
 				var qwerty = [ "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" ];
-				var code = "<form><input type='text' id='search_bar' readonly></form>";
+				var code = "<form><input type='text' id='search_bar' onclick='search();' readonly></form>";
 
 				for(i in qwerty)
 				{
