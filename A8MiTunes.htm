@@ -13,76 +13,106 @@
 				box-sizing: content-box;
 			}
 
+			body
+			{
+				background-color: rgb(39, 39, 39);
+			}
+
 			#tabs
 			{
-				border: 2px solid blue;
+				margin-bottom: 7px;
 				text-align: center;
 			}
 
 			.display
 			{
-				border: 2px solid black;
-				border-collapse: collapse;
 				display: inline-block;
-				overflow: scroll;
+				overflow: auto;
 				height: 400px;
 				width: 350px;
-				color: black;
 				text-align: left;
+				background-color: black;
+				border: 3px solid mediumseagreen;
+				font-family: Rockwell, Verdana, sans-serif;
+				font-size: 18px;
+				color: white;
+			}
+
+			.data
+			{
+				margin: 12px 0;
+			}
+
+			.choice
+			{
+				margin: 12px 0;
+				font-size: 22px;
 			}
 
 			.choice:hover
 			{
-				background-color: grey;
+				background-color: dimgrey;
 				cursor: pointer;
 			}
 
 			.found
 			{
-				background-color: green;
+				background-color: red;
+			}
+
+			.quote
+			{
+				font-size: 20px;
 			}
 
 			#keyboard
 			{
-				border: 5px solid red;
 				margin: auto;
-				line-height: 30px;
-				height: 265px;
+				height: 270px;
 				width: 560px;
+				line-height: 30px;
 				text-align: center;
+				background-color: black;
+				border: 5px solid mediumseagreen;
+				border-radius: 10%;
 			}
 
 			#search_bar
 			{
+				margin-top: 10px;
+				margin-bottom: 8px;
 				height: 35px;
 				width: 180px;
-				margin-top: 10px;
-				font-family: Helvetica;
+				background-color: dimgrey;
+				border-width: 0;
+				font-family: Helvetica, sans-serif;
 				font-size: 25px;
 				cursor: pointer;
 			}
 
 			.key
 			{
-				border: 3px solid blue;
 				display: inline-block;
-				font-size: 40px;
 				margin: 4px;
+				padding: 3px;
 				height: 32px;
 				width: 35px;
-				padding: 3px;
-				font-family: Calibri;
+				border: 3px solid mediumseagreen;
+				border-radius: 20%;
+				font-family: Calibri, sans-serif;
+				font-size: 40px;
+				color: white;
+			}
+
+			.key:hover
+			{
+				background-color: dimgrey;
+				cursor: pointer;
 			}
 
 			.big
 			{
 				width: 150px;
-			}
-
-			.key:hover
-			{
-				background-color: grey;
-				cursor: pointer;
 			}
 		</style>
 		<script type="text/javascript" src="music.js" /></script>
@@ -94,8 +124,8 @@
 				var track = alb.tracks[song_id];
 				var path = "audio/" + alb.artist + "/" + alb.title + "/" + track.mp3.substring(0, track.mp3.length - 4);
 				var code =  "<img src='artwork/" + alb.artwork + ".jpg' />" +
-							"<p>" + alb.artist + "<br />" + alb.title + "</p>" +
-							"<p>Track " + (song_id + 1) + "/" + alb.tracks.length + "<br />" + track.title + "</p>" +
+							"<p class='data'>" + alb.artist + "<br />" + alb.title + "</p>" +
+							"<p class='data'>Track " + (song_id + 1) + "/" + alb.tracks.length + "<br />" + track.title + "</p>" +
 							"<audio controls='controls'>" +
 							"<source src='" + path +".mp3' type='audio/mpeg'>" +
 							"<source src='" + path +".wav' type='audio/wav'>" +
@@ -121,7 +151,7 @@
 			//This function generates code for the album list
 			function generateAlbumList()
 			{
-				var code = "Albums:";
+				var code = "Albums:<br /><br />";
 				for(i in albums)
 				{
 					code += "<p class='choice' onclick='generateTrackList(" + i + ");'>" + albums[i].artist + "/" + albums[i].title + "</p>";
@@ -176,7 +206,7 @@
 
 								if(in_lyrics)
 								{
-									code += "<br />";
+									code += "<br /><span class='quote'>";
 									var start = track.lyrics.lastIndexOf(" ", li - 5);
 									if(start == -1) start = 0;
 									else start++;
@@ -187,6 +217,7 @@
 											"<span class='found'>" + track.lyrics.substring(li, li + s.length) + "</span>" +
 											track.lyrics.substring(li + s.length, end);
 									if(end != track.lyrics.length) code += "...";
+									code += "</span>";
 								}
 
 								code += "</p>";
