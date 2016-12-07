@@ -144,7 +144,7 @@
 				
 				for(i in alb.tracks)
 				{
-					code += "<p class='choice' onclick='generateSongData(" + album_id + ", " + i + ");'>" + alb.tracks[i].title + "</p>";
+					code += "<div class='choice' onclick='generateSongData(" + album_id + ", " + i + ");'>" + alb.tracks[i].title + "</div>";
 				}
 
 				track_list.innerHTML = code;
@@ -156,7 +156,7 @@
 				var code = "Albums:<br /><br />";
 				for(i in albums)
 				{
-					code += "<p class='choice' onclick='generateTrackList(" + i + ");'>" + albums[i].artist + "/" + albums[i].title + "</p>";
+					code += "<div class='choice' onclick='generateTrackList(" + i + ");'>" + albums[i].artist + "/" + albums[i].title + "</div>";
 				}
 
 				album_list.innerHTML = code;
@@ -280,7 +280,7 @@
 			}
 		</script>
 	</head>
-	<body>
+	<body onload='generateAlbumList(); generateKeyboard();'>
 		<div id='tabs'>
 			<div id='album_list' class='display'>
 			</div>
@@ -293,9 +293,5 @@
 		</div>
 		<div id='keyboard'>
 		</div>
-		<script>
-			generateAlbumList();
-			generateKeyboard();
-		</script>
 	</body>
 </html>
