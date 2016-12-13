@@ -119,13 +119,14 @@
 		</style>
 		<script type="text/javascript" src="music.js" /></script>
 		<script type="text/javascript">
-			//This function generates a song tab, whenever a new song is selected
+			
 			function generateSongData(album_id, song_id)
 			{
+				//This function generates a song tab, whenever a new song is selected
 				var alb = albums[album_id];
 				var track = alb.tracks[song_id];
 				var path = "audio/" + alb.artist + "/" + alb.title + "/" + track.mp3.substring(0, track.mp3.length - 4);
-				var code =  "<img src='artwork/" + alb.artwork + ".jpg' />" +
+				var code =  "<img src='artwork/" + alb.artwork + ".jpg' style='max-width: 250px; max-height: 250px;' />" +
 							"<p class='data'>" + alb.artist + "<br />" + alb.title + "</p>" +
 							"<p class='data'>Track " + (song_id + 1) + "/" + alb.tracks.length + "<br />" + track.title + "</p>" +
 							"<audio controls='controls'>" +
@@ -136,9 +137,9 @@
 				current_track.innerHTML = code;
 			}
 
-			//This function generates code for the track list, whenever a new album is chosen
 			function generateTrackList(album_id)
 			{
+				//This function generates code for the track list, whenever a new album is chosen
 				var alb = albums[album_id];
 				var code = alb.title + "<br />by " + alb.artist;
 				
@@ -150,9 +151,9 @@
 				track_list.innerHTML = code;
 			}
 
-			//This function generates code for the album list
 			function generateAlbumList()
 			{
+				//This function generates code for the album list
 				var code = "Albums:<br /><br />";
 				for(i in albums)
 				{
@@ -162,9 +163,9 @@
 				album_list.innerHTML = code;
 			}
 
-			//This function will output the found contents in track list, whenever contents of search bar change
 			function search()
 			{
+				//This function will output the found contents in track list, whenever contents of search bar change
 				var s = search_bar.value;
 				code = "";
 
@@ -182,17 +183,18 @@
 							var track = alb.tracks[k];
 							var low_title = track.title.toLowerCase();
 							var low_lyrics = track.lyrics.toLowerCase();
-							var in_title = false;
-							var in_lyrics = false;
-							var ti = low_title.indexOf(s);
+							var in_title = false; //Has the keyword been found in the title?
+							var in_lyrics = false; //Has the keyword been found in the lyrics?
+							var ti = low_title.indexOf(s); //position in title
 							if(ti != -1) in_title = true;
-							var li = low_lyrics.indexOf(s);
+							var li = low_lyrics.indexOf(s); //position in lyrics
 							if(li != -1) in_lyrics = true;
 
 							if(in_title || in_lyrics)
 							{
 								code += "<p class='choice' onclick='generateSongData(" + i + ", " + k + ");'>";
 
+								//The spans of class "found" represent the highlighted text that matches the keyword
 								if(in_title)
 								{
 									code += track.title.substring(0, ti) +
@@ -209,7 +211,7 @@
 								if(in_lyrics)
 								{
 									code += "<br /><span class='quote'>";
-									var start = track.lyrics.lastIndexOf(" ", li - 5);
+									var start = track.lyrics.lastIndexOf(" ", li - 5); //I chose 5 as the minimal number of characters to display before and after the found keyword
 									if(start == -1) start = 0;
 									else start++;
 									var end = track.lyrics.indexOf(" ", li + s.length + 5);
@@ -236,31 +238,31 @@
 				track_list.innerHTML = code;
 			}
 
-			//This function deletes last letter of the search bar
 			function deleteLetter()
 			{
+				//This function deletes the last letter of the search bar
 				search_bar.value = search_bar.value.substring(0, search_bar.value.length - 1);
 				search();
 			}
 
-			//This function inserts value of the clicked button into the search bar
 			function insertLetter(c)
 			{
+				//This function inserts value of the clicked button into the search bar
 				search_bar.value += c.toLowerCase();
 				search();
 			}
 
-			//This function deletes all letters from the search bar
 			function resetSearchBar()
 			{
+				//This function deletes all letters from the search bar
 				search_bar.value = "";
 				search();
 			}
 
-			//This function generates code for the keyboard used in the 'keyboard' div
 			function generateKeyboard()
 			{
-				var qwerty = [ "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" ];
+				//This function generates code for the keyboard used in the 'keyboard' div
+				var qwerty = [ "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" ]; //list of all keys in a qwerty keyboard, grouped in three rows
 				var code = "<form><input type='text' id='search_bar' onclick='search();' readonly></form>";
 
 				for(i in qwerty)
@@ -272,6 +274,8 @@
 					}
 					code += "</div>";
 				}
+
+				//additional buttons on the final row
 				code += "<div><div class='key big' onclick='insertLetter(\" \");'>SPACE</div>";
 				code += "<div class='key big' onclick='deleteLetter();'>BACK</div>";
 				code += "<div class='key big' onclick='resetSearchBar();'>RESET</div></div>";
